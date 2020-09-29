@@ -1,8 +1,12 @@
 
 public abstract class Game {
-	private int turn;// compteur du nombre de tours du jeu
-	private final int maxturn;// nombre de tours maximum
-	private boolean isRunning;// permet de savoir si le jeu est en pause ou non
+	protected int turn;// compteur du nombre de tours du jeu
+	protected final int maxturn;// nombre de tours maximum
+	protected boolean isRunning;// permet de savoir si le jeu est en pause ou non
+	
+	public Game(int _maxturn) {
+		this.maxturn = _maxturn;
+	}
 	
 	// Initialise le jeu en :
 	// - remettant le compteur de tour turn à zéro
@@ -28,7 +32,12 @@ public abstract class Game {
 	
 	//Lance le jeu en appelant la méthode step jusqu'à la fin
 	public void run() {
-		
+		if(isRunning) {
+			step();
+		}
+	}
+	public void pause() {
+		this.isRunning = false;
 	}
 	
 	public abstract void initializeGame();
