@@ -1,11 +1,13 @@
 import java.sql.Date;
 
+
 public abstract class Game implements Runnable{
 	protected int turn;// compteur du nombre de tours du jeu
 	protected final int maxturn;
 	private boolean isRunning;// permet de savoir si le jeu est en pause ou non
 	private Thread thread;
 	private long time;
+  
 	// Initialise le jeu en :
 	// - remettant le compteur de tour turn à zéro
 	// - met isRunning à true
@@ -46,12 +48,7 @@ public abstract class Game implements Runnable{
 				System.out.println(exp.getMessage());
 			}
 		}
-
-		
-		
-		
-		
-	}
+  }
 	public void launch() {
 		this.isRunning=true;
 		try {
@@ -61,7 +58,10 @@ public abstract class Game implements Runnable{
 			System.out.println(exp.getMessage());
 			
 		}
-	
+  }
+	public void pause() {
+		this.isRunning = false;
+
 	}
 	
 	public abstract void initializeGame();
