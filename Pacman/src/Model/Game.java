@@ -1,12 +1,14 @@
-import java.sql.Date;
+package Model;
 
+import Controleur.ControleurSimpleGame;
 
-public abstract class Game implements Runnable{
+public abstract class Game implements Runnable , MyObservable{
 	protected int turn;// compteur du nombre de tours du jeu
 	protected final int maxturn;
 	private boolean isRunning;// permet de savoir si le jeu est en pause ou non
 	private Thread thread;
 	private long time;
+	private ControleurSimpleGame _controleurGame;
   
 	// Initialise le jeu en :
 	// - remettant le compteur de tour turn à zéro
@@ -30,6 +32,7 @@ public abstract class Game implements Runnable{
 		if(gameContinue()) {
 			this.turn++;
 			takeTurn();
+			notifierObservateur();
 		}else {
 			this.isRunning = false;
 			gameOver();
@@ -38,9 +41,9 @@ public abstract class Game implements Runnable{
 	
 	//Lance le jeu en appelant la méthode step jusqu'à la fin
 	public void run() {
-		ViewSimpleGame V= new ViewSimpleGame();
-		ViewCommand V1 = new ViewCommand();
+		System.out.println("Test");
 		while(isRunning) {
+			System.out.println("entre dans boucle");
 			step();
 			try {
 			Thread.sleep(time);
@@ -60,7 +63,12 @@ public abstract class Game implements Runnable{
 		}
   }
 	public void pause() {
-		this.isRunning = false;
+		if(isRunning) {
+			this.isRunning = false;
+		}else {
+			this.isRunning = true;
+		}
+		
 
 	}
 	
@@ -68,4 +76,34 @@ public abstract class Game implements Runnable{
 	public abstract void takeTurn();
 	public abstract boolean gameContinue();
 	public abstract void gameOver();
+	
+	public void enrengistrerObservateur(ControleurSimpleGame CG) {
+		this._controleurGame = CG;
+	}
+	public void supprimerObservateur() {
+		
+	}
+	public void notifierObservateur() {
+		_controleurGame.actualizeTurn();
+	}
+
+
+	public int getTurn() {
+		return turn;
+	}
+
+
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}
+
+
+	public void setRunning(boolean isRunning) {
+		this.isRunning = isRunning;
+	}
+
+
+	public void setTime(long time) {
+		this.time = time;
+	}
 }
