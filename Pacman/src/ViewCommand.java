@@ -2,95 +2,95 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class ViewCommand {
-
 	
-	
-private JFrame fenetre;
+	private JFrame fenetre;
+	private int _turn;
 	
 	public ViewCommand() {
-	fenetre = new JFrame();
-	fenetre.setTitle("Commande");
-	fenetre.setSize(700, 300);
-	fenetre.setLocationRelativeTo(null);
-	fenetre.setResizable(false);
-    fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    createView();
-    fenetre.setVisible(true);
-    
-	}
+		_turn = 0;
+		fenetre = new JFrame();
+		fenetre.setTitle("Commande");
+		fenetre.setSize(700, 300);
+		fenetre.setLocationRelativeTo(null);
+		fenetre.setResizable(false);
+    	fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	createView();
+    	fenetre.setVisible(true);
+    }
 	
+	public int get_turn() {
+		return _turn;
+	}
+
+	public void set_turn(int _turn) {
+		this._turn = _turn;
+	}
+
 	public void createView(){
-		   
+		    // Panel général constitué de 2 sous-panel top et bottom
 			JPanel general = new JPanel();
-			general.setLayout(new GridBagLayout());
-			GridBagConstraints constrainte = new GridBagConstraints();
-			constrainte.gridx = 0;
-			constrainte.gridy = 0;
+			general.setLayout(new GridLayout(2,0));
+			
+			// Top Panel constitué des 4 buttons
+			JPanel top_panel = new JPanel();
+			top_panel.setLayout(new GridLayout(0,4));
+			
 			Icon restart_icon =  new ImageIcon("Resources/icon_restart.png");
 			JButton restart = new JButton(restart_icon);
-			general.add(restart,constrainte);
+			top_panel.add(restart);
 			
-			constrainte.gridx = 1;
 			Icon run_icon =  new ImageIcon("Resources/icon_run.png");
 			JButton run = new JButton(run_icon);
-			general.add(run);
-			constrainte.gridx = 2;
+			top_panel.add(run);
+			
 			Icon step_icon =  new ImageIcon("Resources/icon_step.png");
 			JButton step = new JButton(step_icon);
-			general.add(step);
-			constrainte.gridx = 3;
+			top_panel.add(step);
+			
 			Icon pause_icon =  new ImageIcon("Resources/icon_pause.png");
 			JButton pause = new JButton(pause_icon);
-			general.add(pause);
+			top_panel.add(pause);
 			
+			//Bottom Panel constitué du slider et affichage du nombre de tours 
+			JPanel bottom_panel = new JPanel();
+			bottom_panel.setLayout(new GridLayout(0,2));
 			
+			// Slider
 			JPanel sliderpanel = new JPanel();
-			sliderpanel.setLayout(new BoxLayout(sliderpanel, BoxLayout.Y_AXIS));
+			sliderpanel.setLayout(new GridLayout(2,0));
 			
 			JLabel sliderLabel = new JLabel("Number of turns per second", JLabel.CENTER);
 	        sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+	        
 			JSlider speed = new JSlider(JSlider.HORIZONTAL,0,10,1);
-			
-			
-			speed.addChangeListener(new ChangeListener() {
-				
-				@Override
-				public void stateChanged(ChangeEvent e) {
-					
-					
-				}
-			});
 			speed.setMajorTickSpacing(1);
 			speed.setMinorTickSpacing(1);
-			speed.setPaintTrack(true);
 			speed.setPaintTicks(true);
 			speed.setPaintLabels(true);
 			speed.setLabelTable(speed.createStandardLabels(1));
-			general.add(sliderLabel);
+			
 			sliderpanel.add(sliderLabel);
 			sliderpanel.add(speed);
-			general.add(sliderpanel);
+			bottom_panel.add(sliderpanel);
 			
+			// Label des tours 
+			JLabel nombreTours = new JLabel("Turn: "+ Integer.toString(_turn),JLabel.CENTER);
+			bottom_panel.add(nombreTours);
+			
+			// Ajout des 2 sous-panel au panel général
+			general.add(top_panel);
+			general.add(bottom_panel);
 			
 			fenetre.setContentPane(general);
-	 
-			
-	 
 		}
 		
 		

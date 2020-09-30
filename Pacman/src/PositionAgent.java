@@ -1,5 +1,3 @@
-package agent;
-
 import java.io.Serializable;
 
 public class PositionAgent implements Serializable {
