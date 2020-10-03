@@ -1,4 +1,4 @@
-package Controleur;
+package controleur;
 
 public interface InterfaceControleur {
 	void start();
@@ -6,4 +6,5 @@ public interface InterfaceControleur {
 	void run();
 	void pause();
 	void setTime(double time);
+	void actualize() ;
 }

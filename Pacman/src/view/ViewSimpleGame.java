@@ -1,4 +1,4 @@
-package View;
+package view;
 
 import java.awt.Component;
 
@@ -7,21 +7,19 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import Controleur.ControleurSimpleGame;
+import controleur.ControleurSimpleGame;
 
 
 
 public class ViewSimpleGame {
 	
 	private JFrame fenetre;
-	private ControleurSimpleGame controleurGame;
 	private int turn;
 	private JLabel turn_label;
 	
-	public ViewSimpleGame(ControleurSimpleGame CG) {
-		this.controleurGame = CG;
+	public ViewSimpleGame() {
 		fenetre = new JFrame();
-		fenetre.setTitle("Game");
+		fenetre.setTitle("Pacman");
 		fenetre.setSize(700, 700);
 		fenetre.setLocationRelativeTo(null);
 		fenetre.setResizable(false);

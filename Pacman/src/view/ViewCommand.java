@@ -1,4 +1,4 @@
-package View;
+package view;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -6,7 +6,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Controleur.ControleurSimpleGame;
+import controleur.InterfaceControleur;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -21,20 +21,20 @@ public class ViewCommand {
 	
 	private JFrame fenetre;
 	private int _turn;
-	private ControleurSimpleGame controleurGame;
+	private InterfaceControleur controleurGame;
 	private JButton restart_button;
 	private JButton run_button;
 	private JButton step_button;
 	private JButton pause_button;
 	private JLabel nombreTours;
 	
-	public ViewCommand(ControleurSimpleGame CG) {
+	public ViewCommand(InterfaceControleur CG) {
 		this.controleurGame = CG;
 		_turn = 0;
 		fenetre = new JFrame();
-		fenetre.setTitle("Commande");
-		fenetre.setSize(700, 300);
-		fenetre.setLocationRelativeTo(null);
+		fenetre.setTitle("Commandes");
+		fenetre.setSize(500, 300);
+		fenetre.setLocation(1350,400);
 		fenetre.setResizable(false);
     	fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	createView();
@@ -55,19 +55,19 @@ public class ViewCommand {
 			JPanel top_panel = new JPanel();
 			top_panel.setLayout(new GridLayout(1,4));
 			
-			Icon restart_icon =  new ImageIcon("Resources/icon_restart.png");
+			Icon restart_icon =  new ImageIcon("Resources/icons/icon_restart.png");
 			restart_button = new JButton(restart_icon);
 			top_panel.add(restart_button);
 			
-			Icon run_icon =  new ImageIcon("Resources/icon_run.png");
+			Icon run_icon =  new ImageIcon("Resources/icons/icon_run.png");
 			run_button = new JButton(run_icon);
 			top_panel.add(run_button);
 			
-			Icon step_icon =  new ImageIcon("Resources/icon_step.png");
+			Icon step_icon =  new ImageIcon("Resources/icons/icon_step.png");
 			step_button = new JButton(step_icon);
 			top_panel.add(step_button);
 			
-			Icon pause_icon =  new ImageIcon("Resources/icon_pause.png");
+			Icon pause_icon =  new ImageIcon("Resources/icons/icon_pause.png");
 			pause_button = new JButton(pause_icon);
 			top_panel.add(pause_button);
 			
@@ -112,7 +112,7 @@ public class ViewCommand {
 			JLabel sliderLabel = new JLabel("Number of turns per second", JLabel.CENTER);
 	        sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 	        
-			JSlider speed = new JSlider(JSlider.HORIZONTAL,0,10,1);
+			JSlider speed = new JSlider(JSlider.HORIZONTAL,1,10,1);
 			speed.setMajorTickSpacing(1);
 			speed.setMinorTickSpacing(1);
 			speed.setPaintTicks(true);
