@@ -1,12 +1,13 @@
 package controleur;
 
-import model.Maze;
 import model.PacmanGame;
+import model.PanelPacmanGame;
 import view.ViewCommand;
 import view.ViewPacmanGame;
 
 public class ControleurPacmanGame implements InterfaceControleur{
 	private PacmanGame game;
+	private PanelPacmanGame game_panel;
 	private ViewPacmanGame view_game;
 	private ViewCommand viewCommand;
 	
@@ -20,10 +21,11 @@ public class ControleurPacmanGame implements InterfaceControleur{
 	@Override
 	public void start() {
 		System.out.println("Bouton restart appuyé");
-		game.init();
-		viewCommand.changeStateButton();
-		game.launch();
-		
+		game.init(); // on initialise le jeu
+		viewCommand.changeStateButton(); //on change les status des boutons 
+		game_panel = new PanelPacmanGame(game.getMaze()); // on crée le panelPacman à partir du maze de game
+		view_game.setGame_panel(game_panel);// on envoie le panelPacman à la view
+		game.launch();// on lance le jeu
 	}
 
 	@Override

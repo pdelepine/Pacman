@@ -2,14 +2,11 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridLayout;
-
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.Maze;
+//import model.Maze;
 import model.PanelPacmanGame;
 
 public class ViewPacmanGame {
@@ -38,15 +35,9 @@ public class ViewPacmanGame {
 		turn_label = new JLabel("Current turn: "+ Integer.toString(turn));
 		turn_label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		try {
-			game_panel = new PanelPacmanGame(new Maze("Resources/layouts/bigCorners.lay"));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		turn_panel.add(turn_label);
 		general.add(turn_panel, BorderLayout.NORTH);
-		general.add(game_panel, BorderLayout.CENTER);
 		fenetre.add(general);
 		fenetre.setVisible(true);
 	}
@@ -56,6 +47,10 @@ public class ViewPacmanGame {
 
 	public void setGame_panel(PanelPacmanGame game_panel) {
 		this.game_panel = game_panel;
+		general.add(game_panel, BorderLayout.CENTER);
+		fenetre.add(general);
+		fenetre.setVisible(true);
+		
 	}
 
 	public void setTurn(int turn) {
