@@ -19,7 +19,7 @@ public class ControleurSimpleGame implements InterfaceControleur{
 	public void start() {
 		System.out.println("Bouton restart appuyé");
 		_game.init();
-		_viewCommand.changeStateButton();
+		//_viewCommand.changeStateButton();// chnage l'état des boutons
 		_game.launch();		
 	}
 
