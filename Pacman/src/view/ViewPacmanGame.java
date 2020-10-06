@@ -2,14 +2,23 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import model.Agent;
+import model.AgentFantome;
+import model.AgentPacman;
+import model.Game;
+import model.PacmanGame;
 //import model.Maze;
 import model.PanelPacmanGame;
+import model.PositionAgent;
 
-public class ViewPacmanGame {
+public class ViewPacmanGame implements Observateur{
 	private JFrame fenetre;
 	private int turn;
 	private JLabel turn_label;
@@ -21,7 +30,7 @@ public class ViewPacmanGame {
 		// On paramètre la fenêtre	
 		fenetre = new JFrame();
 		fenetre.setTitle("Pacman");
-		fenetre.setSize(700, 700);
+		fenetre.setSize(1000, 1000);
 		fenetre.setLocationRelativeTo(null);
 		fenetre.setResizable(false);
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,11 +58,34 @@ public class ViewPacmanGame {
 		this.game_panel = game_panel;
 		general.add(game_panel, BorderLayout.CENTER);
 		fenetre.add(general);
+		fenetre.setSize(game_panel.getMaze().getSizeX() * 25, game_panel.getMaze().getSizeY() * 25);
 		fenetre.setVisible(true);
 		
 	}
 
 	public void setTurn(int turn) {
 		this.turn = turn;
+		turn_label.setText("Current turn: "+ Integer.toString(turn));
+	}
+	@Override
+	public void update(Game game) {
+		PacmanGame pgame = (PacmanGame) game;
+		this.turn = pgame.getTurn();	
+		turn_label.setText("Current turn: "+Integer.toString(pgame.getTurn())); // Change le label sur l'inteface
+		
+		// update la position des agents (pacman et fantome)
+		ArrayList<PositionAgent> pacmans = new ArrayList<PositionAgent>();
+		ArrayList<PositionAgent> fantomes = new ArrayList<PositionAgent>();
+		for( Agent agt : pgame.getAgents()) {
+			if(agt.isPacman()) {
+				pacmans.add(agt.getPosition());
+			}else {
+				fantomes.add(agt.getPosition());
+			}
+		}
+		game_panel.setPacmans_pos(pacmans);
+		game_panel.setGhosts_pos(fantomes);
+		// On actualise l'interface du jeu
+		game_panel.repaint();
 	}
 }

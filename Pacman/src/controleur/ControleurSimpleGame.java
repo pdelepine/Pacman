@@ -10,9 +10,11 @@ public class ControleurSimpleGame implements InterfaceControleur{
 	private ViewSimpleGame _viewSimpleGame;
 	public ControleurSimpleGame(Game game){
 		this._game = game;
-		this._game.enrengistrerObservateur(this);
 		this._viewCommand = new ViewCommand(this);
 		this._viewSimpleGame = new ViewSimpleGame();
+		this._game.enrengistrerObservateur(_viewCommand);
+		this._game.enrengistrerObservateur(_viewSimpleGame);
+		
 	}
 
 	@Override
@@ -41,17 +43,13 @@ public class ControleurSimpleGame implements InterfaceControleur{
 	}
 
 	@Override
+	// change le nombre de tours par seconde
 	public void setTime(double time) {
 		int t = (int)time;
 		System.out.println("------ Vitesse modifié : "+ Integer.toString(t)+" tours par second ------");
 		if(time !=0) {
 			_game.setTime((long)(1000/time));
 		}
-	}
-	
-	public void actualize() {
-		_viewCommand.set_turn(_game.getTurn());
-		_viewSimpleGame.setTurn(_game.getTurn());
 	}
 	
 }

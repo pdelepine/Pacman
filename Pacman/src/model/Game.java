@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 
 import controleur.InterfaceControleur;
+import view.Observateur;
 
 public abstract class Game implements Runnable , MyObservable{
 	protected int turn;// compteur du nombre de tours du jeu
@@ -10,7 +11,8 @@ public abstract class Game implements Runnable , MyObservable{
 	private boolean isRunning;// permet de savoir si le jeu est en pause ou non
 	private Thread thread;
 	private long time;
-	private ArrayList<InterfaceControleur> _controleurs;
+	//private ArrayList<InterfaceControleur> _controleurs;
+	private ArrayList<Observateur> _observateurs;
   
 	// Initialise le jeu en :
 	// - remettant le compteur de tour turn à zéro
@@ -19,7 +21,7 @@ public abstract class Game implements Runnable , MyObservable{
 	public Game(int maxturn,long time) {
 		this.time = time;
 		this.maxturn = maxturn;
-		_controleurs = new ArrayList<InterfaceControleur>();
+		_observateurs = new ArrayList<Observateur>();
 	}
 	
 	
@@ -34,6 +36,7 @@ public abstract class Game implements Runnable , MyObservable{
 		// appelle taketurn() si le jeu n'est pas terminé
 		if(gameContinue()) {
 			this.turn++;
+			System.out.println("\t Tour: "+ Integer.toString(turn));
 			takeTurn();
 			notifierObservateur();
 		}else {
@@ -81,16 +84,16 @@ public abstract class Game implements Runnable , MyObservable{
 	public abstract boolean gameContinue();
 	public abstract void gameOver();
 	
-	public void enrengistrerObservateur(InterfaceControleur CG) {
-		this._controleurs.add(CG);
+	public void enrengistrerObservateur(Observateur CG) {
+		this._observateurs.add(CG);
 	}
-	public void supprimerObservateur(InterfaceControleur CG) {
-		this._controleurs.remove(CG);
+	public void supprimerObservateur(Observateur CG) {
+		this._observateurs.remove(CG);
 		
 	}
 	public void notifierObservateur() {
-		for(InterfaceControleur i : _controleurs) {
-			i.actualize();
+		for(Observateur i : _observateurs) {
+			i.update(this);
 		}
 	}
 

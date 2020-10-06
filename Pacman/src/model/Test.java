@@ -25,7 +25,7 @@ public class Test{
 		//SimpleGame simplegame = new SimpleGame(100,4000);
 		//ControleurSimpleGame CG = new ControleurSimpleGame(simplegame);
 		
-		PacmanGame pacman = new PacmanGame(100, 3000);
+		PacmanGame pacman = new PacmanGame(1000, 3000);
 		//ControleurPacmanGame cpg; 
 		
 		//Création d'un file chooser pour lister les layouts
