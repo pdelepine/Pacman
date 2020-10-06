@@ -1,8 +1,8 @@
-package Controleur;
+package controleur;
 
-import Model.Game;
-import View.ViewCommand;
-import View.ViewSimpleGame;
+import model.Game;
+import view.ViewCommand;
+import view.ViewSimpleGame;
 
 public class ControleurSimpleGame implements InterfaceControleur{
 	private Game _game;
@@ -10,9 +10,9 @@ public class ControleurSimpleGame implements InterfaceControleur{
 	private ViewSimpleGame _viewSimpleGame;
 	public ControleurSimpleGame(Game game){
 		this._game = game;
-		_game.enrengistrerObservateur(this);
+		this._game.enrengistrerObservateur(this);
 		this._viewCommand = new ViewCommand(this);
-		this._viewSimpleGame = new ViewSimpleGame(this);
+		this._viewSimpleGame = new ViewSimpleGame();
 	}
 
 	@Override
@@ -20,42 +20,38 @@ public class ControleurSimpleGame implements InterfaceControleur{
 		System.out.println("Bouton restart appuyé");
 		_game.init();
 		_viewCommand.changeStateButton();
-		_game.launch();
-		
+		_game.launch();		
 	}
 
 	@Override
 	public void step() {
 		System.out.println("Bouton step appuyé");
-		_game.step();
-		
+		_game.step();		
 	}
 
 	@Override
 	public void run() {
 		System.out.println("Bouton run appuyé");
-		_game.run();
-		
+		_game.launch();		
 	}
 
 	@Override
 	public void pause() {
-		System.out.println("Bouton pause appuyé");
-		_game.pause();
-		
+		_game.pause();		
 	}
 
 	@Override
 	public void setTime(double time) {
 		int t = (int)time;
-		System.out.println("Silder modifié : "+ Integer.toString(t));
+		System.out.println("------ Vitesse modifié : "+ Integer.toString(t)+" tours par second ------");
 		if(time !=0) {
 			_game.setTime((long)(1000/time));
 		}
 	}
 	
-	public void actualizeTurn() {
+	public void actualize() {
 		_viewCommand.set_turn(_game.getTurn());
 		_viewSimpleGame.setTurn(_game.getTurn());
 	}
+	
 }

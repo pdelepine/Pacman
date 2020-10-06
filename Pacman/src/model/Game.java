@@ -1,6 +1,8 @@
-package Model;
+package model;
 
-import Controleur.ControleurSimpleGame;
+import java.util.ArrayList;
+
+import controleur.InterfaceControleur;
 
 public abstract class Game implements Runnable , MyObservable{
 	protected int turn;// compteur du nombre de tours du jeu
@@ -8,7 +10,7 @@ public abstract class Game implements Runnable , MyObservable{
 	private boolean isRunning;// permet de savoir si le jeu est en pause ou non
 	private Thread thread;
 	private long time;
-	private ControleurSimpleGame _controleurGame;
+	private ArrayList<InterfaceControleur> _controleurs;
   
 	// Initialise le jeu en :
 	// - remettant le compteur de tour turn à zéro
@@ -17,6 +19,7 @@ public abstract class Game implements Runnable , MyObservable{
 	public Game(int maxturn,long time) {
 		this.time = time;
 		this.maxturn = maxturn;
+		_controleurs = new ArrayList<InterfaceControleur>();
 	}
 	
 	
@@ -40,23 +43,26 @@ public abstract class Game implements Runnable , MyObservable{
 	}
 	
 	//Lance le jeu en appelant la méthode step jusqu'à la fin
-	public void run() {
-		System.out.println("Test");
+	public void run(){
 		while(isRunning) {
-			System.out.println("entre dans boucle");
+			System.out.println("Le jeu continue !");
 			step();
 			try {
-			Thread.sleep(time);
-			}catch (Exception exp) {
+				Thread.sleep(time);
+			}catch (InterruptedException exp) {
+				System.out.println("Thread interrupted !");
 				System.out.println(exp.getMessage());
 			}
+		}
+		if(!isRunning) {
+			System.out.println("------ Thread tué -------");
 		}
   }
 	public void launch() {
 		this.isRunning=true;
 		try {
-		thread = new Thread(this);
-		thread.start();
+		this.thread = new Thread(this);
+		this.thread.start();
 		}catch (Exception exp) {
 			System.out.println(exp.getMessage());
 			
@@ -64,12 +70,10 @@ public abstract class Game implements Runnable , MyObservable{
   }
 	public void pause() {
 		if(isRunning) {
+			System.out.println("------ Jeu en pause -------");
 			this.isRunning = false;
-		}else {
-			this.isRunning = true;
 		}
 		
-
 	}
 	
 	public abstract void initializeGame();
@@ -77,14 +81,17 @@ public abstract class Game implements Runnable , MyObservable{
 	public abstract boolean gameContinue();
 	public abstract void gameOver();
 	
-	public void enrengistrerObservateur(ControleurSimpleGame CG) {
-		this._controleurGame = CG;
+	public void enrengistrerObservateur(InterfaceControleur CG) {
+		this._controleurs.add(CG);
 	}
-	public void supprimerObservateur() {
+	public void supprimerObservateur(InterfaceControleur CG) {
+		this._controleurs.remove(CG);
 		
 	}
 	public void notifierObservateur() {
-		_controleurGame.actualizeTurn();
+		for(InterfaceControleur i : _controleurs) {
+			i.actualize();
+		}
 	}
 
 
