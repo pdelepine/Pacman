@@ -7,6 +7,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import controleur.InterfaceControleur;
+import model.Game;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -17,10 +18,10 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class ViewCommand {
+public class ViewCommand implements Observateur{
 	
 	private JFrame fenetre;
-	private int _turn;
+	private int turn;
 	private InterfaceControleur controleurGame;
 	private JButton restart_button;
 	private JButton run_button;
@@ -30,7 +31,7 @@ public class ViewCommand {
 	
 	public ViewCommand(InterfaceControleur CG) {
 		this.controleurGame = CG;
-		_turn = 0;
+		turn = 0;
 		fenetre = new JFrame();
 		fenetre.setTitle("Commandes");
 		fenetre.setSize(500, 300);
@@ -42,8 +43,8 @@ public class ViewCommand {
     }
 	
 	public void set_turn(int turn) {
-		this._turn = turn;
-		nombreTours.setText("Turn: "+Integer.toString(_turn));
+		this.turn = turn;
+		nombreTours.setText("Turn: "+Integer.toString(turn));
 	}
 
 	public void createView(){
@@ -131,7 +132,7 @@ public class ViewCommand {
 			bottom_panel.add(sliderpanel);
 			
 			// Label des tours 
-			nombreTours = new JLabel("Turn: "+ Integer.toString(_turn),JLabel.CENTER);
+			nombreTours = new JLabel("Turn: "+ Integer.toString(turn),JLabel.CENTER);
 			bottom_panel.add(nombreTours);
 			
 			// Ajout des 2 sous-panel au panel général
@@ -148,5 +149,13 @@ public class ViewCommand {
 		run_button.setEnabled(true);
 		step_button.setEnabled(true);
 		pause_button.setEnabled(true);
+	}
+
+	@Override
+	public void update(Game game) {
+		this.turn = game.getTurn();	
+		nombreTours.setText("Current turn: "+Integer.toString(turn)); // Change le label sur l'inteface
+		
+		
 	}
 }

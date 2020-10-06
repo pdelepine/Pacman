@@ -7,4 +7,9 @@ public class AgentPacman extends Agent{
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public boolean isPacman() {
+		return true;
+	}
+
 }

@@ -1,9 +1,10 @@
 package model;
 
-import controleur.InterfaceControleur;
+import view.Observateur;
 
 public interface MyObservable {
-	void enrengistrerObservateur(InterfaceControleur CG);
-	void supprimerObservateur(InterfaceControleur CG);
+	void enrengistrerObservateur(Observateur CG);
+	void supprimerObservateur(Observateur CG);
 	void notifierObservateur();
+	
 }

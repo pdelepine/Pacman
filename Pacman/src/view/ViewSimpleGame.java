@@ -8,10 +8,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controleur.ControleurSimpleGame;
+import model.Game;
 
 
 
-public class ViewSimpleGame {
+public class ViewSimpleGame implements Observateur{
 	
 	private JFrame fenetre;
 	private int turn;
@@ -37,7 +38,13 @@ public class ViewSimpleGame {
 
 	public void setTurn(int turn) {
 		this.turn = turn;
-		turn_label.setText("Current turn: "+Integer.toString(turn));
+		
+	}
+
+	@Override
+	public void update(Game game) {
+		this.turn = game.getTurn();	
+		turn_label.setText("Current turn: "+Integer.toString(turn)); // Change le label sur l'inteface
 	}
 
 }

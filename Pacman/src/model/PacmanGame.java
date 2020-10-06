@@ -22,8 +22,36 @@ public class PacmanGame extends Game{
 
 	@Override
 	public void takeTurn() {
-		// TODO Auto-generated method stub
+		// Les agents font leur action
+		for( Agent agt : agents) {
+			AgentAction action;
+			do {
+				action = new AgentAction((int) (Math.random() * 4) );
+			}while(isLegalMove(agt, action));
+			moveAgent(agt, action);
+			
+			// On teste si de la nourriture est mangée
+			if(agt.isPacman() && maze.isFood(agt.getPosition().getX(), agt.getPosition().getY())) {
+				maze.setFood(agt.getPosition().getX(), agt.getPosition().getY(), false);
+			}
+			// On teste si une capsule est mangée
+			if(agt.isPacman() && maze.isCapsule(agt.getPosition().getX(), agt.getPosition().getY())) {
+				maze.setCapsule(agt.getPosition().getX(), agt.getPosition().getY(), false);
+				
+			}
+		}
 		
+		for( Agent agt1 : agents) {
+			for( Agent agt2 : agents) {
+				// Si agt1 est un pacman et agt2 un fantome
+				if(agt1.isPacman() && !agt2.isPacman()) {
+					if(agt1.getPosition() == agt2.getPosition()) {
+						agents.remove(agt1);
+					}
+				}
+			}
+		}
+		notifierObservateur();
 	}
 
 	@Override
@@ -70,14 +98,7 @@ public class PacmanGame extends Game{
 	// renvoie true si l'action est possible 
 	public boolean isLegalMove(Agent agent,AgentAction action) {
 		//Test pour savoir si la prochaine position sera un mur
-		if(maze.isWall(agent.getPosition().getX() + action.get_vx(), agent.getPosition().getY() + action.get_vy())) {
-			return false;
-		}else if(maze.isFood(agent.getPosition().getX() + action.get_vx(), agent.getPosition().getY() + action.get_vy())) {
-				
-			
-		}
-		
-		return true;
+		return (maze.isWall(agent.getPosition().getX() + action.get_vx(), agent.getPosition().getY() + action.get_vy())); 
 	}
 	
 	// Deplace un agent vers une position donne
@@ -97,6 +118,10 @@ public class PacmanGame extends Game{
 	
 	public void removeAgent(Agent agt) {
 		agents.remove(agt);
+	}
+	
+	public ArrayList<Agent> getAgents() {
+		return agents;
 	}
 	
 	

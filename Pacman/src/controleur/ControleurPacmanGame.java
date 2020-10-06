@@ -13,9 +13,11 @@ public class ControleurPacmanGame implements InterfaceControleur{
 	
 	public ControleurPacmanGame(PacmanGame game) {
 		this.game = game;
-		this.game.enrengistrerObservateur(this);
 		this.view_game 	 = new ViewPacmanGame();
 		this.viewCommand = new ViewCommand(this);
+		this.game.enrengistrerObservateur(this.view_game);
+		this.game.enrengistrerObservateur(this.viewCommand);
+		
 	}	
 	
 	@Override
@@ -52,12 +54,6 @@ public class ControleurPacmanGame implements InterfaceControleur{
 		if(time !=0) {
 			game.setTime((long)(1000/time));
 		}		
-	}
-
-	@Override
-	public void actualize() {
-		viewCommand.set_turn(game.getTurn());
-		view_game.setTurn(game.getTurn());	
 	}
 
 }

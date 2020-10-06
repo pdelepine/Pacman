@@ -14,4 +14,6 @@ public abstract class Agent {
 	public PositionAgent getPosition() {
 		return position;
 	}
+	
+	public abstract boolean isPacman();
 }
