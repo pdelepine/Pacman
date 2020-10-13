@@ -3,6 +3,7 @@ package model;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -34,6 +35,7 @@ public class Test{
 		jfc.setCurrentDirectory(new File("./Resources/layouts"));
 		//On récupère la liste des fichiers dans un string
 		String[] layout_names = jfc.getCurrentDirectory().list();
+		Arrays.sort(layout_names);
 		
 		// Création de la fenêtre de sélection de layout
 		JFrame layout_selector_frame = new JFrame();

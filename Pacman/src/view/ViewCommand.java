@@ -156,6 +156,12 @@ public class ViewCommand implements Observateur{
 		this.turn = game.getTurn();	
 		nombreTours.setText("Current turn: "+Integer.toString(turn)); // Change le label sur l'inteface
 		
+		if(!game.gameContinue()) {
+			restart_button.setEnabled(true);
+			run_button.setEnabled(false);
+			step_button.setEnabled(false);
+			pause_button.setEnabled(false);
+		}
 		
 	}
 }
