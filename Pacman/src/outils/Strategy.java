@@ -1,4 +1,6 @@
-package model;
+package outils;
+
+import model.Game;
 
 // Stretegy du comortement d'un Agent
 public interface Strategy {

@@ -1,4 +1,4 @@
-package model;
+package outils;
 
 public class AgentFantome extends Agent{
 

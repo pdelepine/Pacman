@@ -2,6 +2,16 @@ package model;
 
 import java.util.ArrayList;
 
+import outils.Agent;
+import outils.AgentAction;
+import outils.AgentFantome;
+import outils.AgentPacman;
+import outils.Maze;
+import outils.PositionAgent;
+import outils.StrategyAleatoire;
+import outils.StrategyFuite;
+import outils.StrategyPoursuite;
+
 public class PacmanGame extends Game{	
 	private Maze maze;
 	private String layout_chosen;// nom du fichier layout représentant le labyrinthe
@@ -28,7 +38,9 @@ public class PacmanGame extends Game{
 
 	@Override
 	public void takeTurn() {
-		// Les agents font leur action
+		System.out.println("\t Nombre d'agents :"+ Integer.toString(agents.size()));
+		
+		// Les agents choisisse leur action
 		for( Agent agt : agents) {
 			// Si une capsule est mangée on modifié la strategy des agents
 			if(capsuleMange) {
@@ -46,21 +58,26 @@ public class PacmanGame extends Game{
 			}
 			
 			agt.setAction(getAction(agt));
+		}
+		//Les agents effectue leur action
+		for(Agent agt : agents) {
 			moveAgent(agt, agt.getAction());
-			
-			// On teste si de la nourriture est mangée
+
+			// On teste si de la nourriture est mangée par un pacman
 			if(agt.isPacman() && maze.isFood(agt.getPosition().getX(), agt.getPosition().getY())) {
 				maze.setFood(agt.getPosition().getX(), agt.getPosition().getY(), false);
 			}
-			// On teste si une capsule est mangée
+			// On teste si une capsule est mangée par un pacman
 			// Si oui on déclenche un timer de 20 périodes aux cours desquelles les pacman peuvent manger les fantômes
 			if(agt.isPacman() && maze.isCapsule(agt.getPosition().getX(), agt.getPosition().getY())) {
 				maze.setCapsule(agt.getPosition().getX(), agt.getPosition().getY(), false);
 				turnCapsuleMange = turn;
 				capsuleMange = true;
-				
+
 			}
 		}
+		
+		
 		ArrayList<Agent> pacmans = new ArrayList<Agent>();
 		ArrayList<Agent> ghosts = new ArrayList<Agent>();
 		// On sépare en deux les agents (pacman et fantome)
@@ -78,7 +95,7 @@ public class PacmanGame extends Game{
 				for( Agent agt2 : pacmans) {
 					System.out.println(agt1.getPosition() +" "+ agt2.getPosition());
 					if(agt1.getPosition().getX() == agt2.getPosition().getX() && agt1.getPosition().getY() == agt2.getPosition().getY()) {
-						System.out.println("Pacman est tué");
+						System.out.println("Fantome est tué");
 						agents.remove(agt1);
 					}							
 				}
@@ -88,8 +105,8 @@ public class PacmanGame extends Game{
 			// Si c'est le cas il meurt
 			for(Agent agt1 : pacmans) {
 				for( Agent agt2 : ghosts) {
-					System.out.println(agt1.getPosition() +" "+ agt2.getPosition());
 					if(agt1.getPosition().getX() == agt2.getPosition().getX() && agt1.getPosition().getY() == agt2.getPosition().getY()) {
+						System.out.println("Pacman : "+agt1.getPosition() +" Fantôme : "+ agt2.getPosition());
 						System.out.println("Pacman est tué");
 						agents.remove(agt1);
 						nombrePacman --;
@@ -98,30 +115,26 @@ public class PacmanGame extends Game{
 			}
 		}
 		if(turn > turnCapsuleMange +20) capsuleMange = false ;
-		
-		notifierObservateur();
 	}
 
 	@Override
 	// Condition d'arrêt du jeu
 	public boolean gameContinue() {
-		System.out.print("\t Test si jeu terminé");
-		System.out.println(" " + Boolean.toString(this.turn<=this.maxturn));
+			
 		
 		boolean hasFood = false ;// SI HasFood = true c'est qu'il reste des pac-gommes dans le labyrinthe
 		for(int x = 0; x < maze.getSizeX() ; x++) {
 			for(int y = 0 ; y<maze.getSizeY() ; y++) {
-				hasFood = maze.isFood(x, y) || maze.isCapsule(x, y);// Si il y a une pacgomme hasFood = true
+				if(maze.isFood(x, y) || maze.isCapsule(x, y)) hasFood = true ;// Si il y a une pacgomme hasFood = true
 				
 			}
 		}
-		return this.turn<this.maxturn && nombrePacman != 0 && !hasFood ;
+		return this.turn<this.maxturn && nombrePacman != 0 && hasFood == true ;
 	}
 
 	@Override
 	public void gameOver() {
-		System.out.println("Le jeu est terminé");
-		notifierObservateur();
+		System.out.println("Le jeu est terminé ! (╯✧▽✧)╯");
 		
 	}
 	
@@ -169,9 +182,14 @@ public class PacmanGame extends Game{
 	
 	// Renvoie une action possible dans le labyrinthe pour un agent donné
 	public AgentAction getAction(Agent agt) {
-		
-		AgentAction action = agt.getStrategy().getAction(agt, this);
+		if(agt.isPacman()) {
+			System.out.println("Un pacman joue");
+		}else {
+			System.out.println("Un fantôme joue");
+		}
 		agt.getStrategy().afficheStrategy();
+		AgentAction action = agt.getStrategy().getAction(agt, this);
+		
 		if(action == null) {
 			do {
 				action = new AgentAction((int) (Math.random() * 5) );

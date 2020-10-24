@@ -1,4 +1,4 @@
-package model;
+package outils;
 import java.io.Serializable;
 
 public class PositionAgent implements Serializable {
