@@ -5,9 +5,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
-import agent.PositionAgent;
-
-import motor.Maze;
+import outils.Maze;
+import outils.PositionAgent;
 
 public class PanelPacmanGame extends JPanel {
 
