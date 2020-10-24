@@ -2,21 +2,16 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import model.Agent;
-import model.AgentFantome;
-import model.AgentPacman;
 import model.Game;
 import model.PacmanGame;
-//import model.Maze;
-import model.PanelPacmanGame;
-import model.PositionAgent;
+import outils.Agent;
+import outils.PositionAgent;
 
 public class ViewPacmanGame implements Observateur{
 	private JFrame fenetre;
@@ -80,7 +75,6 @@ public class ViewPacmanGame implements Observateur{
 		ArrayList<PositionAgent> pacmans = new ArrayList<PositionAgent>();
 		ArrayList<PositionAgent> fantomes = new ArrayList<PositionAgent>();
 		
-		System.out.println("Nombre d'agents :"+ Integer.toString(pgame.getAgents().size()));
 		for( Agent agt : pgame.getAgents()) {
 			if(agt.isPacman()) {
 				pacmans.add(agt.getPosition());

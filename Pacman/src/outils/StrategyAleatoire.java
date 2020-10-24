@@ -1,4 +1,7 @@
-package model;
+package outils;
+
+import model.Game;
+import model.PacmanGame;
 
 // Cette strategie renvoie une action aléotoire possible
 public class StrategyAleatoire implements Strategy{

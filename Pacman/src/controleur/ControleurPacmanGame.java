@@ -1,7 +1,7 @@
 package controleur;
 
 import model.PacmanGame;
-import model.PanelPacmanGame;
+import view.PanelPacmanGame;
 import view.ViewCommand;
 import view.ViewPacmanGame;
 

@@ -1,4 +1,6 @@
-package model;
+package outils;
+
+import model.PacmanGame;
 
 public abstract class Agent {
 	protected PositionAgent position;

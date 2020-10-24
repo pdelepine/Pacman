@@ -14,9 +14,6 @@ import javax.swing.JPanel;
 
 import controleur.ControleurPacmanGame;
 
-import controleur.ControleurSimpleGame;
-import controleur.InterfaceControleur;
-
 public class Test{
 	public static ControleurPacmanGame cpg;
 	
@@ -51,6 +48,7 @@ public class Test{
 		layout_list.setSelectedIndex(layout_list.getItemCount()-1); // On met que le choix sélectionné soit la chaine vide
 		//Lorsque l'on sélectionne un layout on l'envoie a PacmanGame
 		layout_list.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				JComboBox<String> cb = (JComboBox<String>)e.getSource();
 				String layout_chosen = (String)cb.getSelectedItem();

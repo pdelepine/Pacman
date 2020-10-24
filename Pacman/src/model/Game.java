@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import controleur.InterfaceControleur;
 import view.Observateur;
 
 public abstract class Game implements Runnable , MyObservable{
@@ -34,28 +33,31 @@ public abstract class Game implements Runnable , MyObservable{
 	public void step() {
 		//Incrémente le compteur de tour du jeu
 		// appelle taketurn() si le jeu n'est pas terminé
+		System.out.println("\tTest si le jeu continue : ");	
 		if(gameContinue()) {
+			System.out.println("\t-> oui");
 			this.turn++;
 			System.out.println("\t Tour: "+ Integer.toString(turn));
 			takeTurn();
-			notifierObservateur();
 		}else {
+			System.out.println("\t-> non");
 			this.isRunning = false;
 			gameOver();
 		}
+		notifierObservateur();
 	}
 	
 	//Lance le jeu en appelant la méthode step jusqu'à la fin
 	public void run(){
 		while(isRunning) {
-			System.out.println("Le jeu continue !");
-			step();
 			try {
 				Thread.sleep(time);
 			}catch (InterruptedException exp) {
 				System.out.println("Thread interrupted !");
 				System.out.println(exp.getMessage());
 			}
+			System.out.println("Le jeu continue !");
+			step();			
 		}
 		if(!isRunning) {
 			System.out.println("------ Thread tué -------");
@@ -100,6 +102,10 @@ public abstract class Game implements Runnable , MyObservable{
 
 	public int getTurn() {
 		return turn;
+	}
+
+	public boolean isRunning() {
+		return isRunning;
 	}
 
 

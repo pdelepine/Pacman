@@ -1,6 +1,9 @@
-package model;
+package outils;
 
 import java.util.ArrayList;
+
+import model.Game;
+import model.PacmanGame;
 
 // Cette strategy suit les pac-gommes(Food) avec enpriorité celle de devant
 public class StrategySimple implements Strategy{
