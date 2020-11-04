@@ -10,6 +10,7 @@ import outils.Maze;
 import outils.PositionAgent;
 import outils.StrategyAleatoire;
 import outils.StrategyFuite;
+import outils.StrategyInteractive;
 import outils.StrategyPoursuite;
 
 public class PacmanGame extends Game{	
@@ -19,21 +20,27 @@ public class PacmanGame extends Game{
 	private int nombrePacman;
 	private int turnCapsuleMange;
 	private boolean capsuleMange;
+	private boolean modeInteractif;
+	private boolean pacmanInteractif;
+	private boolean fantomeInteractif;
 
 	public PacmanGame(int maxturn, long time) {
 		super(maxturn, time);
 		agents = new ArrayList<Agent>();
 		nombrePacman = 0;
+		modeInteractif = false;
+		pacmanInteractif = false;
+		fantomeInteractif = false;
 				
 	}
 
 	@Override
 	public void initializeGame() {
-		System.out.println("Jeu initialisé");
 		chargeMaze();
 		agents = new ArrayList<Agent>();
 		loadAgent();
 		capsuleMange = false;
+		System.out.println("Jeu initialisé");
 	}
 
 	@Override
@@ -45,15 +52,23 @@ public class PacmanGame extends Game{
 			// Si une capsule est mangée on modifié la strategy des agents
 			if(capsuleMange) {
 				if(agt.isPacman()) { // Si l'agent est un pacman
-					agt.setStrategy(new StrategyPoursuite());
+					if(!agt.isEstInteractif()) {
+						agt.setStrategy(new StrategyPoursuite());
+					}					
 				}else { // Si c'est un fantome
-					agt.setStrategy(new StrategyFuite());
+					if(!agt.isEstInteractif()) {
+						agt.setStrategy(new StrategyFuite());
+					}
 				}
 			}else {
 				if(agt.isPacman()) { // Si l'agent est un pacman
-					agt.setStrategy(new StrategyFuite());
+					if(!agt.isEstInteractif()) {
+						agt.setStrategy(new StrategyFuite());
+					}
 				}else { // Si c'est un fantome
-					agt.setStrategy(new StrategyPoursuite());
+					if(!agt.isEstInteractif()) {
+						agt.setStrategy(new StrategyPoursuite());
+					}
 				}
 			}
 			
@@ -156,21 +171,42 @@ public class PacmanGame extends Game{
 		ArrayList<PositionAgent> positionsPacmans = maze.getPacman_start();
 		ArrayList<PositionAgent> positionsFantomes = maze.getGhosts_start();
 		
+		boolean pacmanInteractifChosis = false;
 		for(PositionAgent i : positionsPacmans) {
 			AgentPacman ap = new AgentPacman(i.getDir(), i.getX(), i.getY(), new StrategyFuite());
+			
+			if(modeInteractif == true && pacmanInteractif == true && pacmanInteractifChosis == false ){
+				System.out.println("Pacman Interactif activé");
+				ap = new AgentPacman(i.getDir(), i.getX(), i.getY(), new StrategyInteractive());
+				ap.setEstInteractif(true);
+				pacmanInteractifChosis = true;
+			}
 			addAgent(ap);
 		}
+		
+		boolean fantomeInteractifChoisis = false;
 		for(PositionAgent i : positionsFantomes) {
 			AgentFantome af = new AgentFantome(i.getDir(), i.getX(), i.getY(), new StrategyAleatoire());
+			if(modeInteractif == true && fantomeInteractif == true && fantomeInteractifChoisis == false ) {
+				System.out.println("Fantome Interactif activé");
+				af = new AgentFantome(i.getDir(), i.getX(), i.getY(), new StrategyInteractive());
+				af.setEstInteractif(true);
+				fantomeInteractifChoisis = true;
+			}
 			addAgent(af);
 		}
 		nombrePacman = maze.getInitNumberOfPacmans();
+		System.out.println("Agents chargé");
 	}
 	
 	// renvoie true si l'action est possible 
 	public boolean isLegalMove(Agent agent,AgentAction action) {
-		//Test pour savoir si la prochaine position sera un mur
-		return (!maze.isWall(agent.getPosition().getX() + action.get_vx(), agent.getPosition().getY() + action.get_vy())); 
+		if(action == null) {
+			return false;
+		}else {
+			//Test pour savoir si la prochaine position sera un mur
+			return (!maze.isWall(agent.getPosition().getX() + action.get_vx(), agent.getPosition().getY() + action.get_vy())); 
+		}		
 	}
 	
 	// Deplace un agent vers une position donne
@@ -198,6 +234,19 @@ public class PacmanGame extends Game{
 		return action;		
 	}
 	
+	// Contrôle clavier
+	public void actionInteractive(String s) {
+		// On va chercher 'agent en mode interactif
+		for( Agent agt : agents) {
+			if(agt.isEstInteractif()) {
+				// On lui envoie l'action à effectuer
+				System.out.println("Change key "+s);
+				((StrategyInteractive)agt.getStrategy()).setKey(s);
+			}
+		}
+	}
+	
+	
 	public Maze getMaze() {
 		return maze;
 	}
@@ -218,6 +267,29 @@ public class PacmanGame extends Game{
 		return capsuleMange;
 	}
 	
+	public boolean isModeInteractif() {
+		return modeInteractif;
+	}
 	
+	public void setModeInteractif(boolean modeInteractif) {
+		this.modeInteractif = modeInteractif;
+	}
 
+	public boolean isPacmanInteractif() {
+		return pacmanInteractif;
+	}
+
+	public void setPacmanInteractif(boolean pacmanInteractif) {
+		this.pacmanInteractif = pacmanInteractif;
+	}
+
+	public boolean isFantomeInteractif() {
+		return fantomeInteractif;
+	}
+
+	public void setFantomeInteractif(boolean fantomeInteractif) {
+		this.fantomeInteractif = fantomeInteractif;
+	}
+
+	
 }

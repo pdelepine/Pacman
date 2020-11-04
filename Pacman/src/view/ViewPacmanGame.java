@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -12,6 +13,8 @@ import model.Game;
 import model.PacmanGame;
 import outils.Agent;
 import outils.PositionAgent;
+import outils.StrategyInteractive;
+import outils.customKeyListener;
 
 public class ViewPacmanGame implements Observateur{
 	private JFrame fenetre;
@@ -19,8 +22,9 @@ public class ViewPacmanGame implements Observateur{
 	private JLabel turn_label;
 	private PanelPacmanGame game_panel;
 	private JPanel general;
+	private customKeyListener controleClavier;
 	
-	public ViewPacmanGame() {
+	public ViewPacmanGame(Game game) {
 		
 		// On paramètre la fenêtre	
 		fenetre = new JFrame();
@@ -39,6 +43,13 @@ public class ViewPacmanGame implements Observateur{
 		JPanel turn_panel = new JPanel();
 		turn_label = new JLabel("Current turn: "+ Integer.toString(turn));
 		turn_label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		// Ajout seulement si on est dans le mode interactif
+		if(((PacmanGame)game).isModeInteractif()) {
+			controleClavier = new customKeyListener(game);
+			fenetre.addKeyListener(controleClavier);
+		}
+		
 		
 		
 		turn_panel.add(turn_label);
