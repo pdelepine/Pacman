@@ -45,7 +45,7 @@ public class Test{
 		
 		//Création du menu déroulant
 		JComboBox<String> layout_list = new JComboBox<String>(layout_names);
-		layout_list.addItem(" "); // On ajoute un choix vide 
+		layout_list.addItem("Choix de layout"); // On ajoute un choix vide 
 		layout_list.setSelectedIndex(layout_list.getItemCount()-1); // On met que le choix sélectionné soit la chaine vide
 		//Lorsque l'on sélectionne un layout on l'envoie a PacmanGame
 		layout_list.addActionListener(new ActionListener() {
@@ -63,7 +63,7 @@ public class Test{
 		buttonModeInteractif.setSelected(false);
 		//Création du menu déroulant choix de l'agent à contrôler
 		JComboBox<String> listAgent = new JComboBox<String>();
-		listAgent.addItem(" "); // On ajoute un choix vide 
+		listAgent.addItem("Choix de l'Agent a incarner"); // On ajoute un choix vide 
 		listAgent.addItem("pacman"); 
 		listAgent.addItem("fantôme"); 
 		listAgent.setSelectedIndex(0); // On met que le choix sélectionné soit la chaine vide

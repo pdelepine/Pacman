@@ -12,6 +12,7 @@ public class StrategyAleatoire implements Strategy{
 		do {
 			action = new AgentAction((int) (Math.random() * 5) );
 		}while(!((PacmanGame)game).isLegalMove(agt, action));
+		System.out.println(" --> Action choisie : "+ action.get_direction()+"\n");
 		return action;
 	}
 

@@ -125,6 +125,7 @@ public class PacmanGame extends Game{
 						System.out.println("Pacman est tué");
 						agents.remove(agt1);
 						nombrePacman --;
+						System.out.println("Nombre de Pacman :"+ nombrePacman);
 					}							
 				}
 			}
@@ -136,7 +137,6 @@ public class PacmanGame extends Game{
 	// Condition d'arrêt du jeu
 	public boolean gameContinue() {
 			
-		
 		boolean hasFood = false ;// SI HasFood = true c'est qu'il reste des pac-gommes dans le labyrinthe
 		for(int x = 0; x < maze.getSizeX() ; x++) {
 			for(int y = 0 ; y<maze.getSizeY() ; y++) {
@@ -144,7 +144,11 @@ public class PacmanGame extends Game{
 				
 			}
 		}
-		return this.turn<this.maxturn && nombrePacman != 0 && hasFood == true ;
+		System.out.println("Reste t-il encore des tours à jouer ? "+((this.turn<this.maxturn)?"Oui":"Non"));
+		System.out.println("Reste t-il encore des Pacmans en vie ? "+((nombrePacman > 0)?"Oui":"Non"));
+		System.out.println("Reste t-il encore de la nourriture a manger? "+((hasFood == true)?"Oui":"Non"));
+		
+		return this.turn<this.maxturn && nombrePacman > 0 && hasFood == true ;
 	}
 
 	@Override

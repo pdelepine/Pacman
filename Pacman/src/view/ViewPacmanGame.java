@@ -2,7 +2,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -13,7 +12,6 @@ import model.Game;
 import model.PacmanGame;
 import outils.Agent;
 import outils.PositionAgent;
-import outils.StrategyInteractive;
 import outils.customKeyListener;
 
 public class ViewPacmanGame implements Observateur{

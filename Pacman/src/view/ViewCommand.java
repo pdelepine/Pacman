@@ -9,7 +9,6 @@ import javax.swing.event.ChangeListener;
 import controleur.ControleurPacmanGame;
 import controleur.InterfaceControleur;
 import model.Game;
-import model.PacmanGame;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -125,7 +124,7 @@ public class ViewCommand implements Observateur{
 	        sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 	        
 			JSlider speed = new JSlider(JSlider.HORIZONTAL,1,10,1);
-			speed.setMajorTickSpacing(1);
+			speed.setMajorTickSpacing(10);
 			speed.setMinorTickSpacing(1);
 			speed.setPaintTicks(true);
 			speed.setPaintLabels(true);
@@ -224,11 +223,15 @@ public class ViewCommand implements Observateur{
 		this.turn = game.getTurn();	
 		nombreTours.setText("Current turn: "+Integer.toString(turn)); // Change le label sur l'inteface
 		
+		System.out.println("Test si le jeu continue !");
 		if(!game.gameContinue()) {
 			restart_button.setEnabled(true);
 			run_button.setEnabled(false);
 			step_button.setEnabled(false);
 			pause_button.setEnabled(false);
+			System.out.println(" -> Non");
+		}else {
+			System.out.println(" -> Oui");
 		}
 		
 	}
