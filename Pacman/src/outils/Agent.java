@@ -7,7 +7,8 @@ public abstract class Agent {
 	protected AgentAction action;
 	protected Strategy strategy;
 	protected boolean estInteractif;
-	
+	protected int numeroJoueur;
+
 	public Agent(int direction, int x, int y, Strategy strat) {
 		this.position = new PositionAgent(x, y, direction);
 		this.action = new AgentAction(direction);
@@ -59,5 +60,12 @@ public abstract class Agent {
 		this.estInteractif = estInteractif;
 	}
 	
+	public int getNumeroJoueur() {
+		return numeroJoueur;
+	}
+
+	public void setNumeroJoueur(int nbJoueur) {
+		this.numeroJoueur = nbJoueur;
+	}
 	
 }

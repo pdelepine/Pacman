@@ -177,28 +177,28 @@ public class ViewCommand implements Observateur{
 				upButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						((ControleurPacmanGame)controleurGame).actionInteractive(upButton.getText());
+						((ControleurPacmanGame)controleurGame).actionInteractive(upButton.getText(),1);
 						
 					}
 				});
 				downButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						((ControleurPacmanGame)controleurGame).actionInteractive(downButton.getText());
+						((ControleurPacmanGame)controleurGame).actionInteractive(downButton.getText(),1);
 						
 					}
 				});
 				leftButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						((ControleurPacmanGame)controleurGame).actionInteractive(leftButton.getText());
+						((ControleurPacmanGame)controleurGame).actionInteractive(leftButton.getText(),1);
 						
 					}
 				});
 				rightButton.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						((ControleurPacmanGame)controleurGame).actionInteractive(rightButton.getText());
+						((ControleurPacmanGame)controleurGame).actionInteractive(rightButton.getText(),1);
 						
 					}
 				});

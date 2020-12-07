@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -38,7 +37,7 @@ public class Test{
 		// Création de la fenêtre de sélection de layout
 		JFrame layout_selector_frame = new JFrame();
 		layout_selector_frame.setTitle("Sélectionnez un labyrinthe");
-		layout_selector_frame.setSize(500, 100);
+		layout_selector_frame.setSize(600, 100);
 		layout_selector_frame.setLocationRelativeTo(null);
 		layout_selector_frame.setResizable(false);
 		layout_selector_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,43 +55,58 @@ public class Test{
 				pacman.setLayout_chosen(jfc.getCurrentDirectory()+"/"+layout_chosen);
 				
 			}
-		});
+		});		
 		
-		// Création d'un bouton de choix mode interactif
-		JCheckBox buttonModeInteractif = new JCheckBox("Mode interactif");
-		buttonModeInteractif.setSelected(false);
 		//Création du menu déroulant choix de l'agent à contrôler
-		JComboBox<String> listAgent = new JComboBox<String>();
-		listAgent.addItem("Choix de l'Agent a incarner"); // On ajoute un choix vide 
-		listAgent.addItem("pacman"); 
-		listAgent.addItem("fantôme"); 
-		listAgent.setSelectedIndex(0); // On met que le choix sélectionné soit la chaine vide
+		JComboBox<String> modeDeJeu = new JComboBox<String>();
+		modeDeJeu.addItem("Mode de Jeu"); // On ajoute un choix vide 
+		modeDeJeu.addItem("Ordi vs Ordi"); 
+		modeDeJeu.addItem("Joueur(Pacman) vs Ordi"); 
+		modeDeJeu.addItem("Joueur(Fantôme) vs Ordi"); 
+		modeDeJeu.addItem("Joueur(Pacman) vs Joueur(Pacman)"); 
+		modeDeJeu.addItem("Joueur(Pacman) vs Joueur(Fantôme)"); 
+		modeDeJeu.setSelectedIndex(0); // On met que le choix sélectionné soit la chaine vide
 		//Lorsque l'on sélectionne un layout on l'envoie a PacmanGame
-		listAgent.addActionListener(new ActionListener() {
+		modeDeJeu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(buttonModeInteractif.isSelected()) {
-					System.out.println(listAgent.getSelectedItem());
-					if(listAgent.getSelectedItem().equals("pacman")) {
-						System.out.println("Un pacman est en mode interactif");
+					System.out.println(modeDeJeu.getSelectedItem());
+					if(modeDeJeu.getSelectedItem().equals("Ordi vs Ordi")) {
+						pacman.setNbPacmanInteractif(0);
+						pacman.setNbFantomeInteractif(0);
+					}else if(modeDeJeu.getSelectedItem().equals("Joueur(Pacman) vs Ordi")) {
+						pacman.setNbPacmanInteractif(1);
 						pacman.setPacmanInteractif(true);
-					}else if(listAgent.getSelectedItem().equals("fantôme")) {
-						System.out.println("Un fantome est en mode interactif");
+						pacman.setModeInteractif(true);
+						
+					}else if(modeDeJeu.getSelectedItem().equals("Joueur(Fantôme) vs Ordi")) {
+						pacman.setNbFantomeInteractif(1);
 						pacman.setFantomeInteractif(true);
+						pacman.setModeInteractif(true);
+						
+					}else if(modeDeJeu.getSelectedItem().equals("Joueur(Pacman) vs Joueur(Pacman)")) {
+						pacman.setNbPacmanInteractif(2);
+						pacman.setPacmanInteractif(true);
+						pacman.setModeInteractif(true);
+						
+					}else if(modeDeJeu.getSelectedItem().equals("Joueur(Pacman) vs Joueur(Fantôme)")) {
+						pacman.setNbPacmanInteractif(1);
+						pacman.setNbFantomeInteractif(1);
+						pacman.setPacmanInteractif(true);
+						pacman.setFantomeInteractif(true);
+						pacman.setModeInteractif(true);
 					}
 				}
-
-			}
-		});
-
+			});
+		
 		
 		
 		//Création du bouton pour lancer le jeu après avoir choisis un layout
 		JButton button_choose = new JButton("Start");
 		button_choose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(buttonModeInteractif.isSelected()) {
+				/*if(buttonModeInteractif.isSelected()) {
 					pacman.setModeInteractif(true);
-				}
+				}*/
 				cpg = new ControleurPacmanGame(pacman);
 				cpg.start();
 				layout_selector_frame.dispose(); // On ferme la fenêtre devenu inutile
@@ -117,8 +131,8 @@ public class Test{
 		panel.add(layout_list);
 		panel.add(button_choose);
 		
-		panel2.add(buttonModeInteractif);
-		panel2.add(listAgent);
+		//panel2.add(buttonModeInteractif);
+		panel2.add(modeDeJeu);
 		
 		general.add(panel);
 		general.add(panel2);

@@ -8,6 +8,7 @@ import model.PacmanGame;
 // Cette strategy implemente la fuite d'un agent à la vue d'un ennemie
 public class StrategyFuite implements Strategy{
 	boolean ennemieNear ;
+	StrategyAetoile sA = new StrategyAetoile();
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -113,9 +114,10 @@ public class StrategyFuite implements Strategy{
 				if(agt.isPacman()) {
 					System.out.println("-------------- Recherche de Nourriture --------------");
 					// Il n'y a pas d'ennemies à proximité donc on change la strategie en recherche de nourriture
-					StrategyNourriture sn = new StrategyNourriture();
-					sn.afficheStrategy();
-					return sn.getAction(agt, game);
+					//StrategyAetoile sa = new StrategyAetoile();
+					//StrategyNourriture sn = new StrategyNourriture();
+					sA.afficheStrategy();
+					return sA.getAction(agt, game);
 				}else {
 					StrategyPriorité sp = new StrategyPriorité();
 					sp.afficheStrategy();

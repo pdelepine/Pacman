@@ -8,7 +8,6 @@ import outils.AgentFantome;
 import outils.AgentPacman;
 import outils.Maze;
 import outils.PositionAgent;
-import outils.StrategyAleatoire;
 import outils.StrategyFuite;
 import outils.StrategyInteractive;
 import outils.StrategyPoursuite;
@@ -23,6 +22,9 @@ public class PacmanGame extends Game{
 	private boolean modeInteractif;
 	private boolean pacmanInteractif;
 	private boolean fantomeInteractif;
+	private int nbPacmanInteractif;
+	private int nbFantomeInteractif;
+	private int nombreDeJoueur;
 
 	public PacmanGame(int maxturn, long time) {
 		super(maxturn, time);
@@ -40,6 +42,7 @@ public class PacmanGame extends Game{
 		agents = new ArrayList<Agent>();
 		loadAgent();
 		capsuleMange = false;
+		nombreDeJoueur = 0;
 		System.out.println("Jeu initialisé");
 	}
 
@@ -53,21 +56,29 @@ public class PacmanGame extends Game{
 			if(capsuleMange) {
 				if(agt.isPacman()) { // Si l'agent est un pacman
 					if(!agt.isEstInteractif()) {
-						agt.setStrategy(new StrategyPoursuite());
+						if(!(agt.getStrategy() instanceof StrategyPoursuite)) {
+							agt.setStrategy(new StrategyPoursuite());
+						}
 					}					
 				}else { // Si c'est un fantome
 					if(!agt.isEstInteractif()) {
-						agt.setStrategy(new StrategyFuite());
+						if(!(agt.getStrategy() instanceof StrategyFuite)) {
+							agt.setStrategy(new StrategyFuite());
+						}
 					}
 				}
 			}else {
 				if(agt.isPacman()) { // Si l'agent est un pacman
 					if(!agt.isEstInteractif()) {
-						agt.setStrategy(new StrategyFuite());
+						if(!(agt.getStrategy() instanceof StrategyFuite)) {
+							agt.setStrategy(new StrategyFuite());
+						}						
 					}
 				}else { // Si c'est un fantome
 					if(!agt.isEstInteractif()) {
-						agt.setStrategy(new StrategyPoursuite());
+						if(!(agt.getStrategy() instanceof StrategyPoursuite)) {
+							agt.setStrategy(new StrategyPoursuite());
+						}
 					}
 				}
 			}
@@ -170,32 +181,40 @@ public class PacmanGame extends Game{
 	public void setLayout_chosen(String layout_chosen) {
 		this.layout_chosen = layout_chosen;
 	}	
+	
 	//Charge les agents 
 	public void loadAgent() {
 		ArrayList<PositionAgent> positionsPacmans = maze.getPacman_start();
 		ArrayList<PositionAgent> positionsFantomes = maze.getGhosts_start();
 		
-		boolean pacmanInteractifChosis = false;
+		
 		for(PositionAgent i : positionsPacmans) {
 			AgentPacman ap = new AgentPacman(i.getDir(), i.getX(), i.getY(), new StrategyFuite());
-			
-			if(modeInteractif == true && pacmanInteractif == true && pacmanInteractifChosis == false ){
+			System.out.println("Load Pacman ");
+			System.out.println(modeInteractif == true );
+			System.out.println( pacmanInteractif == true );
+			System.out.println( nbPacmanInteractif > 0);
+			if(modeInteractif == true && pacmanInteractif == true && nbPacmanInteractif > 0){
 				System.out.println("Pacman Interactif activé");
 				ap = new AgentPacman(i.getDir(), i.getX(), i.getY(), new StrategyInteractive());
 				ap.setEstInteractif(true);
-				pacmanInteractifChosis = true;
+				nbPacmanInteractif --;
+				nombreDeJoueur++;
+				ap.setNumeroJoueur(nombreDeJoueur);
 			}
 			addAgent(ap);
 		}
 		
-		boolean fantomeInteractifChoisis = false;
+		//boolean fantomeInteractifChoisis = false;
 		for(PositionAgent i : positionsFantomes) {
-			AgentFantome af = new AgentFantome(i.getDir(), i.getX(), i.getY(), new StrategyAleatoire());
-			if(modeInteractif == true && fantomeInteractif == true && fantomeInteractifChoisis == false ) {
+			AgentFantome af = new AgentFantome(i.getDir(), i.getX(), i.getY(), new StrategyPoursuite());
+			if(modeInteractif == true && fantomeInteractif == true && nbFantomeInteractif > 0) {
 				System.out.println("Fantome Interactif activé");
 				af = new AgentFantome(i.getDir(), i.getX(), i.getY(), new StrategyInteractive());
 				af.setEstInteractif(true);
-				fantomeInteractifChoisis = true;
+				nbFantomeInteractif --;
+				nombreDeJoueur++;
+				af.setNumeroJoueur(nombreDeJoueur);
 			}
 			addAgent(af);
 		}
@@ -239,10 +258,10 @@ public class PacmanGame extends Game{
 	}
 	
 	// Contrôle clavier
-	public void actionInteractive(String s) {
+	public void actionInteractive(String s,int numeroJoueur) {
 		// On va chercher 'agent en mode interactif
 		for( Agent agt : agents) {
-			if(agt.isEstInteractif()) {
+			if(agt.isEstInteractif() && agt.getNumeroJoueur() == numeroJoueur) {
 				// On lui envoie l'action à effectuer
 				System.out.println("Change key "+s);
 				((StrategyInteractive)agt.getStrategy()).setKey(s);
@@ -295,5 +314,22 @@ public class PacmanGame extends Game{
 		this.fantomeInteractif = fantomeInteractif;
 	}
 
+	public int getNbFantomeInteractif() {
+		return nbFantomeInteractif;
+	}
+
+	public void setNbFantomeInteractif(int nbFantomeInteractif) {
+		this.nbFantomeInteractif = nbFantomeInteractif;
+	}
+
+	public int getNbPacmanInteractif() {
+		return nbPacmanInteractif;
+	}
+
+	public void setNbPacmanInteractif(int nbPacmanInteractif) {
+		this.nbPacmanInteractif = nbPacmanInteractif;
+	}
+
+	
 	
 }

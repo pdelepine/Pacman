@@ -56,8 +56,8 @@ public class ControleurPacmanGame implements InterfaceControleur{
 		}		
 	}
 	
-	public void actionInteractive(String s) {
-		game.actionInteractive(s);
+	public void actionInteractive(String s, int numeroJoueur) {
+		game.actionInteractive(s,numeroJoueur);
 	}
 
 	public boolean isModeInteractif() {

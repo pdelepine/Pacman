@@ -27,10 +27,10 @@ public class ViewPacmanGame implements Observateur{
 		// On paramètre la fenêtre	
 		fenetre = new JFrame();
 		fenetre.setTitle("Pacman");
-		fenetre.setSize(1000, 1000);
+		fenetre.setSize(1000, 700);
 		//fenetre.setMinimumSize(new Dimension(400,400));
 		fenetre.setLocationRelativeTo(null);
-		fenetre.setResizable(false);
+		fenetre.setResizable(true);
 		fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// On crée le layout general
