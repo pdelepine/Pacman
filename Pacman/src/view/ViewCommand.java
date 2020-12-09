@@ -6,10 +6,13 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import controleur.ControleurPacmanGame;
 import controleur.InterfaceControleur;
 import model.Game;
 
 import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +30,10 @@ public class ViewCommand implements Observateur{
 	private JButton run_button;
 	private JButton step_button;
 	private JButton pause_button;
+	private JButton upButton;
+	private JButton downButton;
+	private JButton leftButton;
+	private JButton rightButton;
 	private JLabel nombreTours;
 	
 	public ViewCommand(InterfaceControleur CG) {
@@ -48,11 +55,14 @@ public class ViewCommand implements Observateur{
 	}
 
 	public void createView(){
-		    // Panel général constitué de 2 sous-panel top et bottom
+		    // Panel général constitué de 3 sous-panel top, bottom et controlPanel
 			JPanel general = new JPanel();
 			general.setLayout(new GridLayout(2,1));
 			
-			// Top Panel constitué des 4 buttons
+			// Si on est dans le mode interactif
+			if(((ControleurPacmanGame)controleurGame).isModeInteractif()) general.setLayout(new GridLayout(3,1));			
+			
+			// Top Panel constitué des 4 buttons -------------------------------------------------------------------
 			JPanel top_panel = new JPanel();
 			top_panel.setLayout(new GridLayout(1,4));
 			
@@ -102,7 +112,7 @@ public class ViewCommand implements Observateur{
 			pause_button.setEnabled(false);
 			
 			
-			//Bottom Panel constitué du slider et affichage du nombre de tours 
+			//Bottom Panel constitué du slider et affichage du nombre de tours  --------------------------------
 			JPanel bottom_panel = new JPanel();
 			bottom_panel.setLayout(new GridLayout(1,2));
 			
@@ -114,7 +124,7 @@ public class ViewCommand implements Observateur{
 	        sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 	        
 			JSlider speed = new JSlider(JSlider.HORIZONTAL,1,10,1);
-			speed.setMajorTickSpacing(1);
+			speed.setMajorTickSpacing(10);
 			speed.setMinorTickSpacing(1);
 			speed.setPaintTicks(true);
 			speed.setPaintLabels(true);
@@ -139,6 +149,63 @@ public class ViewCommand implements Observateur{
 			general.add(top_panel);
 			general.add(bottom_panel);
 			
+			// Si on est dans le mode interactif
+			if(((ControleurPacmanGame)controleurGame).isModeInteractif()) {
+				//Bottom Panel constitué du slider et affichage du nombre de tours  --------------------------------
+				JPanel controlPanel = new JPanel();
+				controlPanel.setLayout(new GridBagLayout());
+				GridBagConstraints c = new GridBagConstraints();
+
+				c.fill = GridBagConstraints.HORIZONTAL;
+				c.gridx = 1;
+				c.gridy = 0;
+				upButton = new JButton("up");
+				controlPanel.add(upButton, c);
+				c.gridx = 1;
+				c.gridy = 2;
+				downButton = new JButton("down");
+				controlPanel.add(downButton, c);
+				c.gridx = 0;
+				c.gridy = 1;
+				leftButton = new JButton("left");
+				controlPanel.add(leftButton, c);
+				c.gridx = 2;
+				c.gridy = 1;
+				rightButton = new JButton("right");
+				controlPanel.add(rightButton, c);
+				
+				upButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						((ControleurPacmanGame)controleurGame).actionInteractive(upButton.getText(),1);
+						
+					}
+				});
+				downButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						((ControleurPacmanGame)controleurGame).actionInteractive(downButton.getText(),1);
+						
+					}
+				});
+				leftButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						((ControleurPacmanGame)controleurGame).actionInteractive(leftButton.getText(),1);
+						
+					}
+				});
+				rightButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						((ControleurPacmanGame)controleurGame).actionInteractive(rightButton.getText(),1);
+						
+					}
+				});
+				
+				general.add(controlPanel);
+			}
+			
 			fenetre.setContentPane(general);
 		}
 	/*
@@ -156,11 +223,15 @@ public class ViewCommand implements Observateur{
 		this.turn = game.getTurn();	
 		nombreTours.setText("Current turn: "+Integer.toString(turn)); // Change le label sur l'inteface
 		
+		System.out.println("Test si le jeu continue !");
 		if(!game.gameContinue()) {
 			restart_button.setEnabled(true);
 			run_button.setEnabled(false);
 			step_button.setEnabled(false);
 			pause_button.setEnabled(false);
+			System.out.println(" -> Non");
+		}else {
+			System.out.println(" -> Oui");
 		}
 		
 	}
