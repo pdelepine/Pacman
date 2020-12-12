@@ -7,16 +7,15 @@ import view.ViewPacmanGame;
 
 public class ControleurPacmanGame implements InterfaceControleur{
 	private PacmanGame game;
-	private PanelPacmanGame game_panel;
 	private ViewPacmanGame view_game;
-	private ViewCommand viewCommand;
+	private ViewCommand view_command;
 	
 	public ControleurPacmanGame(PacmanGame game) {
 		this.game = game;
 		this.view_game 	 = new ViewPacmanGame(game);
-		this.viewCommand = new ViewCommand(this);
+		this.view_command = new ViewCommand(this);
 		this.game.enrengistrerObservateur(this.view_game);
-		this.game.enrengistrerObservateur(this.viewCommand);
+		this.game.enrengistrerObservateur(this.view_command);
 		
 	}	
 	
@@ -24,9 +23,9 @@ public class ControleurPacmanGame implements InterfaceControleur{
 	public void start() {
 		System.out.println("Bouton restart appuyé");
 		game.init(); // on initialise le jeu
-		viewCommand.changeStateButton(); //on change les status des boutons 
-		game_panel = new PanelPacmanGame(game.getMaze()); // on crée le panelPacman à partir du maze de game
-		view_game.setGame_panel(game_panel);// on envoie le panelPacman à la view
+		view_command.changeStateButton(); //on change les status des boutons 
+		//game_panel = new PanelPacmanGame(game.getMaze()); // on crée le panelPacman à partir du maze de game
+		view_game.setGame_panel(new PanelPacmanGame(game.getMaze()));// on envoie le panelPacman à la view
 		game.launch();// on lance le jeu
 	}
 

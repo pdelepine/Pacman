@@ -119,9 +119,16 @@ public class StrategyFuite implements Strategy{
 					sA.afficheStrategy();
 					return sA.getAction(agt, game);
 				}else {
-					StrategyPriorité sp = new StrategyPriorité();
-					sp.afficheStrategy();
-					return sp.getAction(agt, game);
+					int random = (int) Math.random();
+					if(random == 0) {// On choisi au hasard parmi les deux stratégies
+						StrategyPriorité sp = new StrategyPriorité();
+						sp.afficheStrategy();
+						return sp.getAction(agt, game);
+					}else {
+						StrategyAleatoire sa = new StrategyAleatoire();
+						sa.afficheStrategy();
+						return sa.getAction(agt, game);
+					}
 				}
 				
 			}

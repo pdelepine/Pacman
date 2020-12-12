@@ -176,10 +176,6 @@ public class PacmanGame extends Game{
 		}catch(Exception e) {
 			System.out.println("Probleme chargement labyrinth");
 		}
-	}
-	
-	public void setLayout_chosen(String layout_chosen) {
-		this.layout_chosen = layout_chosen;
 	}	
 	
 	//Charge les agents 
@@ -187,32 +183,34 @@ public class PacmanGame extends Game{
 		ArrayList<PositionAgent> positionsPacmans = maze.getPacman_start();
 		ArrayList<PositionAgent> positionsFantomes = maze.getGhosts_start();
 		
-		
+		int nbPacmanI = nbPacmanInteractif;
 		for(PositionAgent i : positionsPacmans) {
 			AgentPacman ap = new AgentPacman(i.getDir(), i.getX(), i.getY(), new StrategyFuite());
 			System.out.println("Load Pacman ");
 			System.out.println(modeInteractif == true );
 			System.out.println( pacmanInteractif == true );
 			System.out.println( nbPacmanInteractif > 0);
-			if(modeInteractif == true && pacmanInteractif == true && nbPacmanInteractif > 0){
+			
+			if(modeInteractif == true && pacmanInteractif == true && nbPacmanI > 0){
 				System.out.println("Pacman Interactif activé");
 				ap = new AgentPacman(i.getDir(), i.getX(), i.getY(), new StrategyInteractive());
 				ap.setEstInteractif(true);
-				nbPacmanInteractif --;
+				nbPacmanI --;
 				nombreDeJoueur++;
 				ap.setNumeroJoueur(nombreDeJoueur);
 			}
 			addAgent(ap);
 		}
 		
-		//boolean fantomeInteractifChoisis = false;
+		int nbFantomeI = nbFantomeInteractif;
 		for(PositionAgent i : positionsFantomes) {
 			AgentFantome af = new AgentFantome(i.getDir(), i.getX(), i.getY(), new StrategyPoursuite());
-			if(modeInteractif == true && fantomeInteractif == true && nbFantomeInteractif > 0) {
+			
+			if(modeInteractif == true && fantomeInteractif == true && nbFantomeI > 0) {
 				System.out.println("Fantome Interactif activé");
 				af = new AgentFantome(i.getDir(), i.getX(), i.getY(), new StrategyInteractive());
 				af.setEstInteractif(true);
-				nbFantomeInteractif --;
+				nbFantomeI --;
 				nombreDeJoueur++;
 				af.setNumeroJoueur(nombreDeJoueur);
 			}
@@ -330,6 +328,8 @@ public class PacmanGame extends Game{
 		this.nbPacmanInteractif = nbPacmanInteractif;
 	}
 
-	
+	public void setLayout_chosen(String layout_chosen) {
+		this.layout_chosen = layout_chosen;
+	}
 	
 }
