@@ -7,7 +7,7 @@ import model.PacmanGame;
 // Cette stratégie permet à un agent de poursuivre ses ennemies proches
 public class StrategyPoursuite implements Strategy{
 	boolean ennemieNear ;
-	
+	StrategyAetoile sA = new StrategyAetoile();
 	@SuppressWarnings("unchecked")
 	@Override
 	public AgentAction getAction(Agent agt, Game game) {
@@ -94,13 +94,21 @@ public class StrategyPoursuite implements Strategy{
 				if(agt.isPacman()) {
 					System.out.println("-------------- Recherche de Nourriture --------------");
 					// Il n'y a pas d'ennemies à proximité donc on change la strategie en recherche de nourriture
-					StrategyNourriture sn = new StrategyNourriture();
-					sn.afficheStrategy();
-					return sn.getAction(agt, game);
+					sA.afficheStrategy();
+					return sA.getAction(agt, game);
 				}else {
-					StrategyAleatoire sp = new StrategyAleatoire();
-					sp.afficheStrategy();
-					return sp.getAction(agt, game);
+					int random = (int) Math.random();					
+					if(random == 0) {// On choisi au hasard parmi les deux stratégies
+						StrategyPriorité sp = new StrategyPriorité();
+						sp.afficheStrategy();
+						return sp.getAction(agt, game);
+					}else {
+						StrategyAleatoire sa = new StrategyAleatoire();
+						sa.afficheStrategy();
+						return sa.getAction(agt, game);
+					}
+					
+					
 				}
 			}
 			

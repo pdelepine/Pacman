@@ -1,7 +1,5 @@
 package outils;
 
-import model.PacmanGame;
-
 public abstract class Agent {
 	protected PositionAgent position;
 	protected AgentAction action;
@@ -16,22 +14,14 @@ public abstract class Agent {
 		this.estInteractif = false;
 	}
 	
+	public abstract boolean isPacman();
+	
 	public Strategy getStrategy() {
 		return strategy;
 	}
 
 	public void setStrategy(Strategy strategy) {
 		this.strategy = strategy;
-	}
-
-	public abstract AgentAction comportementAgentSimple(Maze maze);
-	
-	public AgentAction comportementAleatoire(PacmanGame game) {
-		AgentAction action;
-		do {
-			action = new AgentAction((int) (Math.random() * 5) );
-		}while(game.isLegalMove(this, action));
-		return action;
 	}
 
 	public AgentAction getAction() {
@@ -48,9 +38,7 @@ public abstract class Agent {
 
 	public PositionAgent getPosition() {
 		return position;
-	}
-	
-	public abstract boolean isPacman();
+	}	
 
 	public boolean isEstInteractif() {
 		return estInteractif;

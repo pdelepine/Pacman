@@ -12,10 +12,6 @@ public class AgentFantome extends Agent{
 		return false;
 	}
 
-	@Override
-	public AgentAction comportementAgentSimple(Maze maze) {
-		return null;
-		
-	}
+
 
 }
