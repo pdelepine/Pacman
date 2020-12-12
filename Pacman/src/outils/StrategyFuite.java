@@ -7,40 +7,43 @@ import model.PacmanGame;
 
 // Cette strategy implemente la fuite d'un agent à la vue d'un ennemie
 public class StrategyFuite implements Strategy{
-
+	boolean ennemieNear ;
+	StrategyAetoile sA = new StrategyAetoile();
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public AgentAction getAction(Agent agt, Game game) {
 		ArrayList<PositionAgent> ennemie_position = new ArrayList<PositionAgent>();
 		ArrayList<AgentAction> action_fuite = new ArrayList<AgentAction>();
 		ArrayList<AgentAction> action_fuitePossibleHorsFuite = new ArrayList<AgentAction>();
+		ennemieNear = false;
 
 		int x=0,y=-1; // Test case au-dessus
 		System.out.println("---- NORTH ----");
 		ArrayList<Object> liste_obj = new ArrayList<Object>();
 		liste_obj = remplissageListeAction(agt, game,x,y, ennemie_position, action_fuite, action_fuitePossibleHorsFuite);
-		ennemie_position = ((ArrayList<PositionAgent>)liste_obj.get(0));
+		//ennemie_position = ((ArrayList<PositionAgent>)liste_obj.get(0));
 		action_fuite = ((ArrayList<AgentAction>)liste_obj.get(1));
 		action_fuitePossibleHorsFuite = ((ArrayList<AgentAction>)liste_obj.get(2));
 		
 		System.out.println("---- EAST ----");
 		x=-1;y=0; // Test case à gauche
 		liste_obj = remplissageListeAction(agt, game,x,y, ennemie_position, action_fuite, action_fuitePossibleHorsFuite);
-		ennemie_position = ((ArrayList<PositionAgent>)liste_obj.get(0));
+		//ennemie_position = ((ArrayList<PositionAgent>)liste_obj.get(0));
 		action_fuite = ((ArrayList<AgentAction>)liste_obj.get(1));
 		action_fuitePossibleHorsFuite = ((ArrayList<AgentAction>)liste_obj.get(2));
 		
 		System.out.println("---- WEST ----");
 		x=1;y=0; // Test case à droite
 		liste_obj = remplissageListeAction(agt, game,x,y, ennemie_position, action_fuite, action_fuitePossibleHorsFuite);
-		ennemie_position = ((ArrayList<PositionAgent>)liste_obj.get(0));
+		//ennemie_position = ((ArrayList<PositionAgent>)liste_obj.get(0));
 		action_fuite = ((ArrayList<AgentAction>)liste_obj.get(1));
 		action_fuitePossibleHorsFuite = ((ArrayList<AgentAction>)liste_obj.get(2));
 		
 		System.out.println("---- SOUTH ----");
 		x=0;y=1; // Test case au-dessous
 		liste_obj = remplissageListeAction(agt, game,x,y, ennemie_position, action_fuite, action_fuitePossibleHorsFuite);
-		ennemie_position = ((ArrayList<PositionAgent>)liste_obj.get(0));
+		//ennemie_position = ((ArrayList<PositionAgent>)liste_obj.get(0));
 		action_fuite = ((ArrayList<AgentAction>)liste_obj.get(1));
 		action_fuitePossibleHorsFuite = ((ArrayList<AgentAction>)liste_obj.get(2));		
 		
@@ -83,7 +86,7 @@ public class StrategyFuite implements Strategy{
 		}
 		System.out.println("");
 		if(action_fuite.size() > 0) {
-			System.out.println("-------------- Fuite --------------");	
+			System.out.println("-------------- Action de Fuite possible --------------");	
 			// On choisis au hasard si on prend la direction opposé de l'ennemi ou une autre position possible
 			int random = (int)(Math.random() * (action_fuitePossibleHorsFuite.size() + action_fuite.size())) ;
 			if(random < action_fuite.size()) {
@@ -95,15 +98,41 @@ public class StrategyFuite implements Strategy{
 			}
 		
 		}else {
-			System.out.println("-------------- Pas de fuite --------------");
-			// Il n'y a pas d'ennemies à proximité donc un choisis une action aléatoire parmi celles possibles
-			if(action_fuitePossibleHorsFuite.size() > 0) {
-				int random = (int)(Math.random() * action_fuitePossibleHorsFuite.size() ) ;
-				System.out.println("Action choisis parmi celle possible : "+action_fuitePossibleHorsFuite.get(random).get_direction()+"\n");
-				return action_fuitePossibleHorsFuite.get(random); 
+			if(ennemieNear) {
+				System.out.println("-------------- Pas d'action fuite immédiate possible --------------");
+				// Il y a un ennemie à proximité mais pas d'action de fuite opposé possible
+				if(action_fuitePossibleHorsFuite.size() > 0) {
+					int random = (int)(Math.random() * action_fuitePossibleHorsFuite.size() ) ;
+					System.out.println("Action choisis parmi celle possible : "+action_fuitePossibleHorsFuite.get(random).get_direction()+"\n");
+					return action_fuitePossibleHorsFuite.get(random); 
+				}else {
+					System.out.println("Il n'y a plus d'échappatoire et Pacaman meurt (╥﹏╥)");
+					return new AgentAction(AgentAction.STOP);
+
+				}
 			}else {
-				return new AgentAction(AgentAction.STOP);
+				if(agt.isPacman()) {
+					System.out.println("-------------- Recherche de Nourriture --------------");
+					// Il n'y a pas d'ennemies à proximité donc on change la strategie en recherche de nourriture
+					//StrategyAetoile sa = new StrategyAetoile();
+					//StrategyNourriture sn = new StrategyNourriture();
+					sA.afficheStrategy();
+					return sA.getAction(agt, game);
+				}else {
+					int random = (int) Math.random();
+					if(random == 0) {// On choisi au hasard parmi les deux stratégies
+						StrategyPriorité sp = new StrategyPriorité();
+						sp.afficheStrategy();
+						return sp.getAction(agt, game);
+					}else {
+						StrategyAleatoire sa = new StrategyAleatoire();
+						sa.afficheStrategy();
+						return sa.getAction(agt, game);
+					}
+				}
+				
 			}
+			
 			
 		}
 		
@@ -121,6 +150,7 @@ public class StrategyFuite implements Strategy{
 			// Si un agent se trouve aux coordonnées x,y et que c'est un ennemie 
 			if(ennemie.getPosition().getX() == agt.getPosition().getX() + x && ennemie.getPosition().getY() == agt.getPosition().getY() +y && ennemie.isPacman() != agt.isPacman()) {
 				ennemiePresent =true;
+				ennemieNear = true;
 				System.out.println("Ennemi en face ("+ennemie.getPosition().getX()+","+ennemie.getPosition().getY()+")");
 				AgentAction action = new AgentAction(AgentAction.STOP);
 				// On crée une action dans la direction opposée à l'ennemie
@@ -136,7 +166,7 @@ public class StrategyFuite implements Strategy{
 				System.out.print("Fuite à l'opposé de l'ennemie -> ");
 				// On ajoute l'action de fuire seulement si elle n'est pas déjà dans la liste d'action_fuite et que cette action est valide
 				if(((PacmanGame)game).isLegalMove(agt, action)  && action.get_direction() != AgentAction.STOP) {
-					ennemie_position.add(new PositionAgent(x,y,action.get_direction()));
+					//ennemie_position.add(new PositionAgent(x,y,action.get_direction()));
 					boolean present = false;
 					for(AgentAction a : action_fuite) {
 						if(a.get_direction() == action.get_direction()) present = true;

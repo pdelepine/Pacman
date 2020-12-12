@@ -10,7 +10,6 @@ public abstract class Game implements Runnable , MyObservable{
 	private boolean isRunning;// permet de savoir si le jeu est en pause ou non
 	private Thread thread;
 	private long time;
-	//private ArrayList<InterfaceControleur> _controleurs;
 	private ArrayList<Observateur> _observateurs;
   
 	// Initialise le jeu en :
@@ -56,8 +55,12 @@ public abstract class Game implements Runnable , MyObservable{
 				System.out.println("Thread interrupted !");
 				System.out.println(exp.getMessage());
 			}
-			System.out.println("Le jeu continue !");
-			step();			
+			// Test au cas ou le jeu a été mis en pause pendant le sleep
+			if(isRunning) {
+				System.out.println("Le jeu continue !");
+				step();	
+			}
+					
 		}
 		if(!isRunning) {
 			System.out.println("------ Thread tué -------");

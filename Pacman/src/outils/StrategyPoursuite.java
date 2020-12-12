@@ -6,12 +6,15 @@ import model.Game;
 import model.PacmanGame;
 // Cette stratégie permet à un agent de poursuivre ses ennemies proches
 public class StrategyPoursuite implements Strategy{
+	boolean ennemieNear ;
+	StrategyAetoile sA = new StrategyAetoile();
 	@SuppressWarnings("unchecked")
 	@Override
 	public AgentAction getAction(Agent agt, Game game) {
 		ArrayList<PositionAgent> ennemie_position = new ArrayList<PositionAgent>();
 		ArrayList<AgentAction> action_poursuite = new ArrayList<AgentAction>();
 		ArrayList<AgentAction> action_poursuitePossibleHorspoursuite = new ArrayList<AgentAction>();
+		ennemieNear = false;
 		
 		
 		int x=0,y=-1; // Test case au-dessus
@@ -70,22 +73,45 @@ public class StrategyPoursuite implements Strategy{
 		System.out.println("");
 		
 		if(action_poursuite.size() > 0) {
-			System.out.println("-------------- Poursuite --------------  ");
+			System.out.println("-------------- Action de Poursuite possible --------------");	
 			// On choisis une action poursuite au hasard parmis celles possibles 
 			int random = (int)(Math.random() * (action_poursuite.size())) ;
 			System.out.println("Action choisis parmi celle possible : "+action_poursuite.get(random).get_direction()+"\n");
 			return action_poursuite.get(random);
 			
 		}else {
-			System.out.println("-------------- Pas de poursuite --------------  ");
-			// Il n'y a pas d'ennemies à proximité donc un choisis une action aléatoire parmi celles possibles
-			if(action_poursuitePossibleHorspoursuite.size() > 0) {
-				int random = (int)(Math.random() * action_poursuitePossibleHorspoursuite.size() ) ;
-				System.out.println("Action choisis parmi celle possible : "+action_poursuitePossibleHorspoursuite.get(random).get_direction()+"\n");
-				return action_poursuitePossibleHorspoursuite.get(random); 
+			if(ennemieNear) {
+				System.out.println("-------------- Pas de poursuite immédiate possible --------------  ");
+				// Il n'y a pas d'ennemies à proximité donc un choisis une action aléatoire parmi celles possibles
+				if(action_poursuitePossibleHorspoursuite.size() > 0) {
+					int random = (int)(Math.random() * action_poursuitePossibleHorspoursuite.size() ) ;
+					System.out.println("Action choisis parmi celle possible : "+action_poursuitePossibleHorspoursuite.get(random).get_direction()+"\n");
+					return action_poursuitePossibleHorspoursuite.get(random); 
+				}else {
+					return new AgentAction(AgentAction.STOP); 
+				}
 			}else {
-				return new AgentAction(AgentAction.STOP); 
+				if(agt.isPacman()) {
+					System.out.println("-------------- Recherche de Nourriture --------------");
+					// Il n'y a pas d'ennemies à proximité donc on change la strategie en recherche de nourriture
+					sA.afficheStrategy();
+					return sA.getAction(agt, game);
+				}else {
+					int random = (int) Math.random();					
+					if(random == 0) {// On choisi au hasard parmi les deux stratégies
+						StrategyPriorité sp = new StrategyPriorité();
+						sp.afficheStrategy();
+						return sp.getAction(agt, game);
+					}else {
+						StrategyAleatoire sa = new StrategyAleatoire();
+						sa.afficheStrategy();
+						return sa.getAction(agt, game);
+					}
+					
+					
+				}
 			}
+			
 			
 		}
 	}
@@ -103,7 +129,7 @@ public class StrategyPoursuite implements Strategy{
 			// Si un agent se trouve aux coordonnées x,y et que c'est un ennemie 			
 			if(ennemie.getPosition().getX() == agt.getPosition().getX() + x && ennemie.getPosition().getY() == agt.getPosition().getY() + y && ennemie.isPacman() != agt.isPacman()) {
 				ennemiePresent =true ;
-				
+				ennemieNear = true;
 				System.out.println("Ennemie en face ("+ennemie.getPosition().getX()+","+ennemie.getPosition().getY()+")");
 				
 				AgentAction action = new AgentAction(AgentAction.STOP);
